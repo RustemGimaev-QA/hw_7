@@ -67,23 +67,60 @@ def test_zip_creation(create_zip):
     print("Тест завершен: test_zip_creation PASSED [100%]")
     print("\nСодержимое файлов в ZIP-архиве:\n" + "=" * 50)
 
-    # Перебираем содержимое и выводим его на экран
-    for filename, content in contents.items():
-        print(f"\nСодержимое {filename}:") # Выводим имя файла
-        print("-" * 50)  # Разделитель для визуального отделения содержимого
+    # Переменные для отслеживания наличия слов
+    word_found_xlsx = False
+    word_found_csv = False
+    word_found_pdf = False
 
-        # Проверяем, является ли содержимое словарем (например, для XLSX)
-        if isinstance(content, dict):
+    # Перебираем содержимое и ищем файлы
+    for filename, content in contents.items():
+        print(f"Проверяем файл: {filename}") # Выводим имя файла
+        if filename.endswith('.xlsx'):
+            # Проверяем, является ли содержимое словарем (для XLSX)
+            assert isinstance(content, dict), f"Содержимое файла {filename} не является словарем."
+
             # Перебираем каждый лист в XLSX
             for sheet, rows in content.items():
-                print(f"  Лист: {sheet}")  # Выводим имя листа
+                print(f"  Лист: {sheet}") # Выводим имя листа
                 # Перебираем строки в листе
                 for row in rows:
-                    print(f"    {row}")  # Выводим каждую строку
+                    print(f"{row}") # Выводим каждую строку
+                    if "Пока" in str(row):
+                        word_found_xlsx = True # Устанавливаем флаг, если слово найдено
+                        print("    Найдено слово 'Пока'") # Выводим сообщение о найденном слове
+                        break  # Выходим из цикла, если слово найдено
+                if word_found_xlsx:
+                    break # Выходим из внешнего цикла, если слово найдено
 
-        else:  # Если содержимое - это список (например, для CSV и PDF)
-            # Перебираем каждую строку в содержимом
+        elif filename.endswith('.csv'):
+            # Проверяем, является ли содержимое списком (для CSV)
+            assert isinstance(content, list), f"Содержимое файла {filename} не является списком."
+
+            # Перебираем строки в CSV
+            for row in content:
+                print(f"{row}") # Выводим каждую строку
+                if "Sergeevich" in str(row):
+                    word_found_csv = True # Устанавливаем флаг, если слово найдено
+                    print("Найдено слово 'Sergeevich'") # Выводим сообщение о найденном слове
+                    break # Выходим из цикла, если слово найдено
+
+        elif filename.endswith('.pdf'):
+            # Проверяем, является ли содержимое списком (для PDF)
+            assert isinstance(content, list), f"Содержимое файла {filename} не является списком."
+
+            # Перебираем строки в PDF
             for line in content:
-                print(f"    {line}")  # Выводим каждую строку
+                print(f"{line}") # Выводим каждую строку
+                if "Browserstack" in str(line):
+                    word_found_pdf = True # Устанавливаем флаг, если слово найдено
+                    print("Найдено слово 'Browserstack'") # Выводим сообщение о найденном слове
+                    break # Выходим из цикла, если слово найдено
 
-    os.remove(zip_file_path)  # Удаляем ZIP-файл после теста (закомментировано)
+    # Проверяем, были ли найдены слова
+    assert word_found_xlsx, "Слово 'Пока' не найдено в файле XLSX."
+    assert word_found_csv, "Слово 'Sergeevich' не найдено в файле CSV."
+    assert word_found_pdf, "Слово 'Browserstack' не найдено в файле PDF."
+
+    print("Все проверки завершены успешно.")
+
+    os.remove(zip_file_path) # Удаляем ZIP-файл после теста
