@@ -32,8 +32,8 @@ def read_files_from_zip(zip_file_path):
                         content = f.read().decode('utf-8').splitlines() # Читаем содержимое CSV, декодируем и разбиваем на строки
                     except UnicodeDecodeError:
                         # Если возникает ошибка декодирования, пробуем другую кодировку
-                        f.seek(0)  # Сбрасываем указатель файла
-                        content = f.read().decode('ISO-8859-1').splitlines()  # Пробуем другую кодировку
+                        f.seek(0) # Сбрасываем указатель файла
+                        content = f.read().decode('ISO-8859-1').splitlines() # Пробуем другую кодировку
                     reader = csv.reader(content) # Используем csv.reader для чтения содержимого
                     contents[file_info.filename] = list(reader) # Сохраняем содержимое в словарь
 
@@ -81,14 +81,14 @@ def test_zip_creation(create_zip):
 
             # Перебираем каждый лист в XLSX
             for sheet, rows in content.items():
-                print(f"  Лист: {sheet}") # Выводим имя листа
+                print(f"Лист: {sheet}") # Выводим имя листа
                 # Перебираем строки в листе
                 for row in rows:
                     print(f"{row}") # Выводим каждую строку
                     if "Пока" in str(row):
                         word_found_xlsx = True # Устанавливаем флаг, если слово найдено
-                        print("    Найдено слово 'Пока'") # Выводим сообщение о найденном слове
-                        break  # Выходим из цикла, если слово найдено
+                        print("Найдено слово 'Пока'") # Выводим сообщение о найденном слове
+                        break # Выходим из цикла, если слово найдено
                 if word_found_xlsx:
                     break # Выходим из внешнего цикла, если слово найдено
 
