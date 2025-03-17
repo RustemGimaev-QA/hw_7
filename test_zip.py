@@ -1,9 +1,9 @@
-import os  # Импортируем модуль для работы с операционной системой
-import csv  # Импортируем модуль для работы с CSV файлами
-import PyPDF2  # Импортируем библиотеку для работы с PDF файлами
-import openpyxl  # Импортируем библиотеку для работы с XLSX файлами
-from zipfile import ZipFile  # Импортируем класс ZipFile для работы с ZIP архивами
-import pytest  # Импортируем библиотеку для тестирования
+import os
+import csv
+import PyPDF2
+import openpyxl
+from zipfile import ZipFile
+import pytest
 
 @pytest.fixture
 def create_zip():
